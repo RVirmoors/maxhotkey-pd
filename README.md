@@ -1,5 +1,7 @@
 # maxhotkey-pd
- Pure Data plugin that implements Max-like key&mouse shortcuts
+ Pure Data plugin implementing Max-like key&mouse shortcuts.
+
+ Made possible by [Monetus](https://github.com/monetus) and [Seb Shader](https://github.com/sebshader) from the [Pd forum](https://forum.pdpatchrepo.info).
 
 ## included
 
