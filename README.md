@@ -18,6 +18,7 @@
 | I, F | number | ✅ |
 | T | toggle | ✅ |
 | C | comment | ✅ |
+| enter | apply object | ❌ |
 | alt+drag | duplicate | ❌ |
 | ctrl+shift+Y | arrange | ❌ |
 
