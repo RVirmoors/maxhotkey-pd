@@ -39,16 +39,33 @@ bind all <$::modifier-Button-1> {
   }
 }
 
+# doubleclick to add object
+# adapted from https://svn.code.sf.net/p/pure-data/svn/trunk/scripts/guiplugins/simple_examples/tripleclickobj-plugin.tcl
+proc process_tripleclick {window} {
+	set mytoplevel [winfo toplevel $window] 
+    if {[winfo class $mytoplevel] == "PatchWindow" && $::editmode($mytoplevel)} {
+		::pd_connect::pdsend "$mytoplevel obj"
+	}
+}
+bind all <Double-ButtonRelease-1> {process_tripleclick %W}
+
 # alt + click = open help patch
 # https://forum.pdpatchrepo.info/topic/13363/tcl-plugin-open-help-patch/4
-apply {{} {
+rename ::pd_bindings::patch_bindings original_bindings
+# this is for canvas windows
+proc ::pd_bindings::patch_bindings {mytoplevel} {
+    # set normal bindings
+    original_bindings $mytoplevel
+    set tkcanvas [tkcanvas_name $mytoplevel]
+
     # on Mac OS X/Aqua, the Alt/Option key is called Option in Tcl
     if {$::windowingsystem eq "aqua"} {
         set alt "Option"
     } else {
         set alt "Alt"
     }
-    bind all <$alt-Button-1> {
+
+    bind $tkcanvas <$alt-ButtonPress-1> {
         set win [winfo toplevel %W]
         if {[winfo class $win] eq "PatchWindow"} {
             set ::popup_xcanvas %x
@@ -56,7 +73,7 @@ apply {{} {
             ::pdtk_canvas::done_popup $win 2
         }
     }
-}}
+}
 
 #   You'll notice all of pd's stock bindings include the $::modifier key.   \
   This is likely because there is simply less to consider.  Binding to all  \
