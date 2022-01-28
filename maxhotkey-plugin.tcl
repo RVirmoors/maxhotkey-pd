@@ -1,8 +1,8 @@
 # Edited version of the wonderful plugin by Monetus
-# https://forum.pdpatchrepo.info/topic/10303/is-it-possible-to-change-pure-data-s-shortcut-keys/8
+# https://forum.pdpatchrepo.info/topic/10303/is-it-possible-to-change-pure-data-s-shortcut-keys/9
 
 # More help from Seb Shader
-# https://forum.pdpatchrepo.info/topic/13363/tcl-plugin-open-help-patch/2
+# https://forum.pdpatchrepo.info/topic/13363/tcl-plugin-open-help-patch/4
 
 # See more TCL GUI stuff in the Pd github:
 # https://github.com/pure-data/pure-data/blob/master/tcl/pd-gui.tcl
@@ -21,10 +21,26 @@ bind all <$::modifier-Key-w> {}
 # ctrl + m = open console (Pd window)
 bind all <$::modifier-Key-m> {menu_raise_pdwindow}
 # ctrl + click = toggle edit mode
-bind all <$::modifier-Button-1> {menu_toggle_editmode}
+bind all <$::modifier-Button-1> {
+  set win [winfo toplevel %W]
+  if {[winfo class $win] eq "PatchWindow"} {
+    # find object under mouse 
+    # https://www.tcl.tk/man/tcl8.5/TkCmd/canvas.html#M24
+    set obj_under [%W find closest %x %y 0.01]
+    set obj_tags [%W gettags $obj_under]
+    # if there's an object here, one of the tags reported will be "current"
+    # https://www.tcl.tk/man/tcl/TclCmd/lsearch.html
+    set is_over [lsearch $obj_tags current]
+    # debugging:
+    # ::pdwindow::post "$obj_under %x %y $obj_tags $is_over \n"
+    if {$is_over eq -1} {
+      menu_toggle_editmode
+    }
+  }
+}
 
 # alt + click = open help patch
-# https://forum.pdpatchrepo.info/topic/13363/tcl-plugin-open-help-patch/2
+# https://forum.pdpatchrepo.info/topic/13363/tcl-plugin-open-help-patch/4
 apply {{} {
     # on Mac OS X/Aqua, the Alt/Option key is called Option in Tcl
     if {$::windowingsystem eq "aqua"} {
@@ -105,7 +121,7 @@ namespace eval hotkeys:: {
         } elseif {$obj_name eq "comment"} {
           menu_send $mytoplevel text
         } {
-          menu_send_float $mytoplevel obj 0       
+          menu_send_float $mytoplevel obj 1
           type_into_obj $mytoplevel $obj_name
         }
       }
@@ -216,3 +232,9 @@ proc delete_binding {bind_tag key_combination binding} {
 
 # I left this proc at the bottom, because you probably don't need it, but if you  \
   do, just place it in the namespace above and use it where you'd like.
+
+# less eye bleed
+# https://github.com/derekxkwan/pdk-guiplugins/blob/master/pdktheme-plugin.tcl
+#option add *PatchWindow*Canvas.background "old lace"
+#option add *PatchWindow*Canvas.background "mint cream"
+option add *PatchWindow*Canvas.background "ghost white"
