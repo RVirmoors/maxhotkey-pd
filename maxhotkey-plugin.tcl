@@ -39,15 +39,27 @@ bind all <$::modifier-Button-1> {
   }
 }
 
+
+
 # doubleclick to add object
 # adapted from https://svn.code.sf.net/p/pure-data/svn/trunk/scripts/guiplugins/simple_examples/tripleclickobj-plugin.tcl
-proc process_tripleclick {window} {
-	set mytoplevel [winfo toplevel $window] 
-    if {[winfo class $mytoplevel] == "PatchWindow" && $::editmode($mytoplevel)} {
-		::pd_connect::pdsend "$mytoplevel obj"
+bind all <Double-ButtonRelease-1> {
+	set mytoplevel [winfo toplevel %W] 
+  if {[winfo class $mytoplevel] == "PatchWindow" && $::editmode($mytoplevel)} {
+    # find object under mouse 
+    # https://www.tcl.tk/man/tcl8.5/TkCmd/canvas.html#M24
+    set obj_under [%W find closest %x %y 0.01]
+    set obj_tags [%W gettags $obj_under]
+    # if there's an object here, one of the tags reported will be "current"
+    # https://www.tcl.tk/man/tcl/TclCmd/lsearch.html
+    set is_over [lsearch $obj_tags current]
+    # debugging:
+    # ::pdwindow::post "$obj_under : %x %y : $obj_tags | $is_over \n"
+    if {$is_over eq 1} {
+		  ::pd_connect::pdsend "$mytoplevel obj"
+    }
 	}
 }
-bind all <Double-ButtonRelease-1> {process_tripleclick %W}
 
 # alt + click = open help patch
 # https://forum.pdpatchrepo.info/topic/13363/tcl-plugin-open-help-patch/4
@@ -98,7 +110,6 @@ proc ::pd_bindings::patch_bindings {mytoplevel} {
 # the main point of this namespace is to keep the generically named procs \
   from being accidentally called by someone else's plugin.
 namespace eval hotkeys:: {
-
   proc type_into_obj {mytoplevel text} {
     # type into box
     set text_length [string length $text]
@@ -138,7 +149,7 @@ namespace eval hotkeys:: {
         } elseif {$obj_name eq "comment"} {
           menu_send $mytoplevel text
         } {
-          menu_send_float $mytoplevel obj 1
+          menu_send_float $mytoplevel obj -1
           type_into_obj $mytoplevel $obj_name
         }
       }
