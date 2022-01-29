@@ -107,7 +107,7 @@ proc ::pd_bindings::patch_bindings {mytoplevel} {
       }
     }
 
-    # use Return key to apply object
+    # use Return key to apply object, unless editing a comment
     bind $tkcanvas <KeyPress-Return> {
       set mytoplevel [winfo toplevel %W] 
       if {[winfo class $mytoplevel] == "PatchWindow" && $::editingtext($mytoplevel) && !$::editing_comment} {
@@ -183,7 +183,8 @@ namespace eval hotkeys:: {
           menu_send $mytoplevel deselectall
         } elseif {$obj_name eq "comment"} {
           menu_send $mytoplevel text
-          set ::editing_comment 1
+          # TODO make comment stick to canvas (not to cursor)
+          set ::editing_comment 1 ; # used in bind <KeyPress-Return> above
         } {
           menu_send_float $mytoplevel obj -1
           type_into_obj $mytoplevel $obj_name
