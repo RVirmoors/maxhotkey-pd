@@ -9,7 +9,7 @@
 
 | command | action | done |
 |---------|--------|------|
-| ctrl+click | toggle edit mode | ✅ | 
+| ctrl+click on canvas | toggle edit mode | ✅ | 
 | alt+click | open help patch | ✅ |
 | ctrl+M | console (Pd window) | ✅ |
 | double-click | new object | ✅ |
