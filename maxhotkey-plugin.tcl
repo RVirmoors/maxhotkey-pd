@@ -55,6 +55,9 @@ bind all <Double-ButtonRelease-1> {
     # ::pdwindow::post "$obj_under : %x %y : $obj_tags | $is_over \n"
     if {$is_over eq 1} {
 		  ::pd_connect::pdsend "$mytoplevel obj"
+      # backspace trick to keep new object from floating with the mouse
+      ::pd_bindings::sendkey $mytoplevel 1 BackSpace "" 0
+      ::pd_bindings::sendkey $mytoplevel 0 BackSpace "" 0
     }
 	}
 }
