@@ -39,8 +39,6 @@ bind all <$::modifier-Button-1> {
   }
 }
 
-
-
 # doubleclick to add object
 # adapted from https://svn.code.sf.net/p/pure-data/svn/trunk/scripts/guiplugins/simple_examples/tripleclickobj-plugin.tcl
 bind all <Double-ButtonRelease-1> {
@@ -61,7 +59,6 @@ bind all <Double-ButtonRelease-1> {
 	}
 }
 
-# alt + click = open help patch
 # https://forum.pdpatchrepo.info/topic/13363/tcl-plugin-open-help-patch/4
 rename ::pd_bindings::patch_bindings original_bindings
 # this is for canvas windows
@@ -77,13 +74,31 @@ proc ::pd_bindings::patch_bindings {mytoplevel} {
         set alt "Alt"
     }
 
+    # alt + click = open help patch
     bind $tkcanvas <$alt-ButtonPress-1> {
-        set win [winfo toplevel %W]
-        if {[winfo class $win] eq "PatchWindow"} {
+        set mytoplevel [winfo toplevel %W]
+        if {[winfo class $mytoplevel] eq "PatchWindow"} {
             set ::popup_xcanvas %x
             set ::popup_ycanvas %y
-            ::pdtk_canvas::done_popup $win 2
+            ::pdtk_canvas::done_popup $mytoplevel 2
         }
+    }
+
+    # hide cursor while editing text box
+    bind $tkcanvas <KeyPress> {
+      set mytoplevel [winfo toplevel %W]
+      if {[winfo class $mytoplevel] eq "PatchWindow" && $::editingtext($mytoplevel)} {
+        # ::pdwindow::post "typing \n"
+        $mytoplevel configure -cursor none
+      }
+    }
+
+    # make mouse visible again when moving
+    bind all <Motion> {
+      set mytoplevel [winfo toplevel %W] 
+      if {[winfo class $mytoplevel] == "PatchWindow" && $::editmode($mytoplevel)} {
+        $mytoplevel configure -cursor hand2
+      }
     }
 }
 
@@ -159,32 +174,32 @@ namespace eval hotkeys:: {
   # The only point to this variable is being concise.  Don't repeat yourself.
       # bindings for j, x, y, & z are weird
   set keybindings \
-         "a {array } \
+         "a {array} \
           b {bang} \
           c {comment} \
           d {del} \
-          e {env~ } \
+          e {env~} \
           f {number} \
-          g {get } \
-          h {hip~ } \
+          g {get} \
+          h {hip~} \
           i {number} \
           j {outlet} \
           k {key} \
           l {line~} \
           m {message}\
-          n {} \
-          o {osc~ } \
-          p {pack } \
-          q {qlist } \
+          n { } \
+          o {osc~} \
+          p {pack} \
+          q {qlist} \
           r {receive} \
           s {send} \
           t {toggle} \
-          u {until } \
-          v {vcf~ } \
+          u {until} \
+          v {vcf~} \
           w {wrap~} \
-          x {text } \
-          y {print } \
-          z {list }"
+          x {text} \
+          y {print} \
+          z {list}"
   # use the plus sign to keep from erasing other bindings to the key, unless that is what you want
   foreach {letter name} $hotkeys::keybindings {
     # The quotes are to force interpretation of the variable and\
@@ -211,10 +226,15 @@ set overwritten_body [info body pdtk_text_editing]
   # braces around all this to keep $editing from being interpeted
 append overwritten_body {
   if {$editing} {
+    #::pdwindow::post "editing \n"
+    # hide cursor while editing text box
+    $mytoplevel configure -cursor none
     foreach {letter name} $hotkeys::keybindings {
       bind all <Key-$letter> {}
     }
   } else {
+    #::pdwindow::post "not \n"
+    $mytoplevel configure -cursor hand2
     foreach {letter name} $hotkeys::keybindings {
       # yet again, quotes force interpretation, braces to keep the list as one arg
       bind all <Key-$letter> "+hotkeys::create_named_obj %W {$name}"

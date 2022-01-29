@@ -1,5 +1,5 @@
 # maxhotkey-pd
- Pure Data plugin implementing Max-like key&mouse shortcuts.
+ Pure Data plugin implementing Max-like key&mouse shortcuts & UI behaviour.
 
  Tested on pd vanilla 0.52 win x64. 
  
@@ -13,6 +13,7 @@
 | alt+click | open help patch | ✅ |
 | ctrl+M | console (Pd window) | ✅ |
 | double-click | new object | ✅ |
+| typing into object box | hide cursor | ✅ |
 | N | new object | ✅ |
 | M | message | ✅ |
 | B | bang | ✅ |
@@ -25,7 +26,7 @@
 
 (replace ctrl with cmd and alt with option for OSX)
 
-I'm a complete tcl/tk newbie, so the hard stuff (❌) will take a while to implement. Any contributions are welcome!
+I started this as a complete tcl/tk newbie, so the hard stuff (❌) will take a while to implement. Any contributions are welcome!
 
 ## installing
 
