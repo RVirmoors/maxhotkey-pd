@@ -96,10 +96,14 @@ proc ::pd_bindings::patch_bindings {mytoplevel} {
     # make mouse visible again when moving
     bind all <Motion> {
       set mytoplevel [winfo toplevel %W] 
-      if {[winfo class $mytoplevel] == "PatchWindow" && $::editmode($mytoplevel)} {
+      if {[winfo class $mytoplevel] == "PatchWindow" && $::editingtext($mytoplevel)} {
         $mytoplevel configure -cursor hand2
       }
     }
+
+    # use Return key to apply object
+    bind $tkcanvas <KeyPress-Return>          {menu_send %W deselectall; ::pd_bindings::sendkey %W 1 Escape %A 1 27}
+    #bind $tkcanvas <KeyPress-Escape>          {::pd_bindings::sendkey %W 1 Return %A 1 10; ::pdwindow::post "%W 1 %K %A 1 %k \n"}
 }
 
 #   You'll notice all of pd's stock bindings include the $::modifier key.   \

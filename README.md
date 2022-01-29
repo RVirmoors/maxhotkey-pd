@@ -20,7 +20,7 @@
 | I, F | number | ✅ |
 | T | toggle | ✅ |
 | C | comment | ✅ |
-| enter | apply object | ❌ |
+| enter | apply object | ✅ |
 | alt+drag | duplicate | ❌ |
 | ctrl+shift+Y | arrange | ❌ |
 
@@ -34,6 +34,8 @@ I started this as a complete tcl/tk newbie, so the hard stuff (❌) will take a 
 
 2. Run Pure Data, and the shortcuts should now work!
 
+---
+
 ### why not Purr Data?
 
-[Purr Data](https://www.purrdata.net/), [PlugData](https://github.com/timothyschoen/PlugData), [Camomile](https://github.com/pierreguillot/Camomile) et al are wonderful forks that try to bring Pd into the 21th century. Unfortunately that means they use different rendering systems, so these tcl scripts won't apply to them. For now I'm using Pd vanilla, but if someone wants to replicate this work for one of the Pd forks, that would be super nice.
+[Purr Data](https://www.purrdata.net/), [PlugData](https://github.com/timothyschoen/PlugData), [Camomile](https://github.com/pierreguillot/Camomile) et al are wonderful forks that bring Pd into the 21th century. Unfortunately that means they use different rendering systems, so these tcl scripts won't apply to them. For now I'm focussing on Pd vanilla, but if someone wants to replicate this work for one of the Pd forks, that would be super nice.
