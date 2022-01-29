@@ -172,6 +172,9 @@ namespace eval hotkeys:: {
           menu_send $mytoplevel deselectall
         } elseif {$obj_name eq "message"} {
           menu_send $mytoplevel msg
+          # backspace trick to keep new object from floating with the mouse
+          ::pd_bindings::sendkey $mytoplevel 1 BackSpace "" 0
+          ::pd_bindings::sendkey $mytoplevel 0 BackSpace "" 0
         } elseif {$obj_name eq "number"} {
           menu_send $mytoplevel floatatom
           menu_send $mytoplevel deselectall
