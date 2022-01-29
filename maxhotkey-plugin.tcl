@@ -166,40 +166,42 @@ namespace eval hotkeys:: {
         } {
           menu_send_float $mytoplevel obj -1
           type_into_obj $mytoplevel $obj_name
+          # backspace trick to keep new object from floating with the mouse
+          ::pd_bindings::sendkey $mytoplevel 1 BackSpace "" 0
+          ::pd_bindings::sendkey $mytoplevel 0 BackSpace "" 0
         }
       }
     }
   }
 
-  # The only point to this variable is being concise.  Don't repeat yourself.
-      # bindings for j, x, y, & z are weird
+  # Spaces after object names are deleted by backspace trick above
   set keybindings \
-         "a {array} \
+         "a {array } \
           b {bang} \
           c {comment} \
-          d {del} \
-          e {env~} \
+          d {del } \
+          e {env~ } \
           f {number} \
-          g {get} \
-          h {hip~} \
+          g {get } \
+          h {hip~ } \
           i {number} \
-          j {outlet} \
-          k {key} \
-          l {line~} \
+          j {outlet } \
+          k {key } \
+          l {line~ } \
           m {message}\
           n { } \
-          o {osc~} \
-          p {pack} \
-          q {qlist} \
-          r {receive} \
-          s {send} \
+          o {osc~ } \
+          p {pack } \
+          q {qlist } \
+          r {receive } \
+          s {send } \
           t {toggle} \
-          u {until} \
-          v {vcf~} \
-          w {wrap~} \
-          x {text} \
-          y {print} \
-          z {list}"
+          u {until } \
+          v {vcf~ } \
+          w {wrap~ } \
+          x {text } \
+          y {print } \
+          z {list }"
   # use the plus sign to keep from erasing other bindings to the key, unless that is what you want
   foreach {letter name} $hotkeys::keybindings {
     # The quotes are to force interpretation of the variable and\
