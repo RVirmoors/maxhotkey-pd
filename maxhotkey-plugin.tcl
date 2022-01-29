@@ -62,6 +62,9 @@ bind all <Double-ButtonRelease-1> {
 	}
 }
 
+# global vars
+set ::editing_comment 0
+
 # https://forum.pdpatchrepo.info/topic/13363/tcl-plugin-open-help-patch/4
 rename ::pd_bindings::patch_bindings original_bindings
 # this is for canvas windows
@@ -105,7 +108,13 @@ proc ::pd_bindings::patch_bindings {mytoplevel} {
     }
 
     # use Return key to apply object
-    bind $tkcanvas <KeyPress-Return>          {menu_send %W deselectall; ::pd_bindings::sendkey %W 1 Escape %A 1 27}
+    bind $tkcanvas <KeyPress-Return> {
+      set mytoplevel [winfo toplevel %W] 
+      if {[winfo class $mytoplevel] == "PatchWindow" && $::editingtext($mytoplevel) && !$::editing_comment} {
+        menu_send %W deselectall; 
+        ::pd_bindings::sendkey %W 1 Escape %A 1 27
+      }
+    }
     #bind $tkcanvas <KeyPress-Escape>          {::pd_bindings::sendkey %W 1 Return %A 1 10; ::pdwindow::post "%W 1 %K %A 1 %k \n"}
 }
 
@@ -157,6 +166,7 @@ namespace eval hotkeys:: {
       # check that edit mode is on to be sure that you aren't typing into a symbol obj.
       if {!$::editingtext($mytoplevel) && $::editmode($mytoplevel)} {
         # use this to create the object on the canvas window
+        set ::editing_comment 0 ; # to be changed below if starting a comment
         if {$obj_name eq "bang"} {
           menu_send $mytoplevel bng
           menu_send $mytoplevel deselectall
@@ -170,6 +180,7 @@ namespace eval hotkeys:: {
           menu_send $mytoplevel deselectall
         } elseif {$obj_name eq "comment"} {
           menu_send $mytoplevel text
+          set ::editing_comment 1
         } {
           menu_send_float $mytoplevel obj -1
           type_into_obj $mytoplevel $obj_name
