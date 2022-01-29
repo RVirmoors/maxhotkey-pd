@@ -39,3 +39,7 @@ I started this as a complete tcl/tk newbie, so the hard stuff (❌) will take a 
 ### why not Purr Data?
 
 [Purr Data](https://www.purrdata.net/), [PlugData](https://github.com/timothyschoen/PlugData), [Camomile](https://github.com/pierreguillot/Camomile) et al are wonderful forks that bring Pd into the 21th century. Unfortunately that means they use different rendering systems, so these tcl scripts won't apply to them. For now I'm focussing on Pd vanilla, but if someone wants to replicate this work for one of the Pd forks, that would be super nice.
+
+### known issues
+
+Adding the [PD AutoComplete Plugin](https://github.com/HenriAugusto/completion-plugin) breaks these hotkeys. For now, a quick fix is to add `pdtk_text_editing_old $mytoplevel $tag $editing` at the end of the `pdtk_text_editing` proc in [completion-plugin.tcl](https://github.com/HenriAugusto/completion-plugin/blob/master/completion-plugin.tcl) (line 691)

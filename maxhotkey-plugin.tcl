@@ -232,14 +232,14 @@ set overwritten_body [info body pdtk_text_editing]
   # braces around all this to keep $editing from being interpeted
 append overwritten_body {
   if {$editing} {
-    #::pdwindow::post "editing \n"
+    # ::pdwindow::post "editing \n"
     # hide cursor while editing text box
     $mytoplevel configure -cursor none
     foreach {letter name} $hotkeys::keybindings {
       bind all <Key-$letter> {}
     }
   } else {
-    #::pdwindow::post "not \n"
+    # ::pdwindow::post "not \n"
     $mytoplevel configure -cursor hand2
     foreach {letter name} $hotkeys::keybindings {
       # yet again, quotes force interpretation, braces to keep the list as one arg
