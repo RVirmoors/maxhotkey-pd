@@ -42,4 +42,8 @@ I started this as a complete tcl/tk newbie, so the hard stuff (❌) will take a 
 
 ### known issues
 
-Adding the [PD AutoComplete Plugin](https://github.com/HenriAugusto/completion-plugin) breaks these hotkeys. For now, a quick fix is to add `pdtk_text_editing_old $mytoplevel $tag $editing` at the end of the `pdtk_text_editing` proc in [completion-plugin.tcl](https://github.com/HenriAugusto/completion-plugin/blob/master/completion-plugin.tcl) (line 691)
+Adding the [PD AutoComplete Plugin](https://github.com/HenriAugusto/completion-plugin) breaks these hotkeys. For now, a quick fix is to add 
+```tcl
+pdtk_text_editing_old $mytoplevel $tag $editing
+``` 
+at the end of the `pdtk_text_editing` proc in [completion-plugin.tcl](https://github.com/HenriAugusto/completion-plugin/blob/master/completion-plugin.tcl) (line 691)
