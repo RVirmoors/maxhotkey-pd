@@ -201,6 +201,8 @@ namespace eval hotkeys:: {
 
   # Spaces after object names are deleted by backspace trick above
   set keybindings \
+  # if you'd like to create a [float] object using the number keys, add: 1 {1 } \ etc
+  # see https://forum.pdpatchrepo.info/topic/13810/a-gui-plugin-adding-max-hotkeys-and-ui-feel-to-pd-vanilla/4
          "a {array  } \
           b {bang} \
           c {comment} \
