@@ -28,6 +28,8 @@
 
 I started this as a complete tcl/tk newbie, so the hard stuff (❌) will take a while to implement. Any contributions are welcome!
 
+All the key bindings (including some not present in Max) are under the `set keybindings` line in `maxhotkey-plugin.tcl`. Feel free to modify them to suit your needs.
+
 ## installing
 
 1. Download and copy `maxhotkey-plugin.tcl` to a folder in Pd's path, like ```Documents/Pd/externals```. See Help > Find externals > Preferences to find your exact paths.

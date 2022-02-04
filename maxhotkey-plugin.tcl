@@ -111,7 +111,10 @@ proc ::pd_bindings::patch_bindings {mytoplevel} {
     bind $tkcanvas <KeyPress-Return> {
       set mytoplevel [winfo toplevel %W] 
       if {[winfo class $mytoplevel] == "PatchWindow" && $::editingtext($mytoplevel) && !$::editing_comment} {
-        menu_send %W deselectall; 
+        #menu_send %W deselectall;
+        # as suggested here: https://forum.pdpatchrepo.info/topic/13810/a-gui-plugin-adding-max-hotkeys-and-ui-feel-to-pd-vanilla/4
+        ::pd_bindings::canvas_cycle %W 1 %K %A 0 %k; 
+        ::pd_bindings::canvas_cycle %W -1 %K %A 1 %k;
         ::pd_bindings::sendkey %W 1 Escape %A 1 27
       }
     }
@@ -198,32 +201,32 @@ namespace eval hotkeys:: {
 
   # Spaces after object names are deleted by backspace trick above
   set keybindings \
-         "a {array } \
+         "a {array  } \
           b {bang} \
           c {comment} \
-          d {del } \
-          e {env~ } \
+          d {del  } \
+          e {env~  } \
           f {number} \
-          g {get } \
-          h {hip~ } \
+          g {get  } \
+          h {hip~  } \
           i {number} \
-          j {outlet } \
-          k {key } \
-          l {line~ } \
+          j {outlet  } \
+          k {key  } \
+          l {line~  } \
           m {message}\
           n { } \
-          o {osc~ } \
-          p {pack } \
-          q {qlist } \
-          r {receive } \
-          s {send } \
+          o {osc~  } \
+          p {pack  } \
+          q {qlist  } \
+          r {receive  } \
+          s {send  } \
           t {toggle} \
-          u {until } \
-          v {vcf~ } \
-          w {wrap~ } \
-          x {text } \
-          y {print } \
-          z {list }"
+          u {until  } \
+          v {vcf~  } \
+          w {wrap~  } \
+          x {text  } \
+          y {print  } \
+          z {list  }"
   # use the plus sign to keep from erasing other bindings to the key, unless that is what you want
   foreach {letter name} $hotkeys::keybindings {
     # The quotes are to force interpretation of the variable and\
