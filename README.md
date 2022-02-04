@@ -3,7 +3,7 @@
 
  Tested on Pd vanilla 0.52 win x64. 
  
- Made possible by [Monetus](https://github.com/monetus) and [Seb Shader](https://github.com/sebshader) from the [Pd forum](https://forum.pdpatchrepo.info).
+ Made possible by [Monetus](https://github.com/monetus), [Seb Shader](https://github.com/sebshader) and others on the [Pd forum](https://forum.pdpatchrepo.info/topic/13810/a-gui-plugin-adding-max-hotkeys-and-ui-feel-to-pd-vanilla).
 
 ## included
 
