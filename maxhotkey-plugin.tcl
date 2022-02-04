@@ -10,6 +10,9 @@
 # https://github.com/pure-data/pure-data/blob/master/tcl/pdtk_canvas.tcl
 # https://puredata.info/docs/guiplugins/
 
+# Discussion thread:
+# https://forum.pdpatchrepo.info/topic/13810/a-gui-plugin-adding-max-hotkeys-and-ui-feel-to-pd-vanilla/
+
 # -----  Creating and Removing Hotkeys -----
 
 # All of pure data's hotkeys can be found in pd_bindings.tcl
@@ -143,7 +146,45 @@ proc ::pd_bindings::patch_bindings {mytoplevel} {
 
 # the main point of this namespace is to keep the generically named procs \
   from being accidentally called by someone else's plugin.
-namespace eval hotkeys:: {
+namespace eval ::hotkeys:: {
+
+  # default values
+  set keybindings \
+        "a {array  } \
+        b {bang} \
+        c {comment} \
+        d {del  } \
+        e {env~  } \
+        f {number} \
+        g {get  } \
+        h {hip~  } \
+        i {number} \
+        j {outlet  } \
+        k {key  } \
+        l {line~  } \
+        m {message}\
+        n { } \
+        o {osc~  } \
+        p {pack  } \
+        q {qlist  } \
+        r {receive  } \
+        s {send  } \
+        t {toggle} \
+        u {until  } \
+        v {vcf~  } \
+        w {wrap~  } \
+        x {text  } \
+        y {print  } \
+        z {list  }"
+
+  set fname [file join $::current_plugin_loadpath maxhotkey.cfg]
+  if {[file exists $fname]} {
+    pdwindow::post "using key bindings in maxhotkey.cfg\n"
+    source $fname
+  } else {
+    pdwindow::post "maxhotkey.cfg not found. Using standard Max key bindings.\n"
+  }
+
   proc type_into_obj {mytoplevel text} {
     # type into box
     set text_length [string length $text]
@@ -199,41 +240,11 @@ namespace eval hotkeys:: {
     }
   }
 
-  # Spaces after object names are deleted by backspace trick above
-  set keybindings \
-  # if you'd like to create a [float] object using the number keys, add: 1 {1 } \ etc
-  # see https://forum.pdpatchrepo.info/topic/13810/a-gui-plugin-adding-max-hotkeys-and-ui-feel-to-pd-vanilla/4
-         "a {array  } \
-          b {bang} \
-          c {comment} \
-          d {del  } \
-          e {env~  } \
-          f {number} \
-          g {get  } \
-          h {hip~  } \
-          i {number} \
-          j {outlet  } \
-          k {key  } \
-          l {line~  } \
-          m {message}\
-          n { } \
-          o {osc~  } \
-          p {pack  } \
-          q {qlist  } \
-          r {receive  } \
-          s {send  } \
-          t {toggle} \
-          u {until  } \
-          v {vcf~  } \
-          w {wrap~  } \
-          x {text  } \
-          y {print  } \
-          z {list  }"
   # use the plus sign to keep from erasing other bindings to the key, unless that is what you want
-  foreach {letter name} $hotkeys::keybindings {
+  foreach {letter name} $::hotkeys::keybindings {
     # The quotes are to force interpretation of the variable and\
     the curly braces are to keep a list as one argument, e.g. metro 100.
-    bind all <Key-$letter> "+hotkeys::create_named_obj %W {$name}"
+    bind all <Key-$letter> "+::hotkeys::create_named_obj %W {$name}"
   }
 }
 
@@ -258,15 +269,15 @@ append overwritten_body {
     # ::pdwindow::post "editing \n"
     # hide cursor while editing text box
     $mytoplevel configure -cursor none
-    foreach {letter name} $hotkeys::keybindings {
+    foreach {letter name} $::hotkeys::keybindings {
       bind all <Key-$letter> {}
     }
   } else {
     # ::pdwindow::post "not \n"
     $mytoplevel configure -cursor hand2
-    foreach {letter name} $hotkeys::keybindings {
+    foreach {letter name} $::hotkeys::keybindings {
       # yet again, quotes force interpretation, braces to keep the list as one arg
-      bind all <Key-$letter> "+hotkeys::create_named_obj %W {$name}"
+      bind all <Key-$letter> "+::hotkeys::create_named_obj %W {$name}"
     }
   }
 }

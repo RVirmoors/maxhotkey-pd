@@ -28,7 +28,7 @@
 
 I started this as a complete tcl/tk newbie, so the hard stuff (❌) will take a while to implement. Any contributions are welcome!
 
-All the key bindings (including some not present in Max) are under the `set keybindings` line in `maxhotkey-plugin.tcl`. Feel free to modify them to suit your needs.
+All the key bindings (including some not present in Max) are under the `set keybindings` line in `maxhotkey.cfg`. Feel free to modify them to suit your needs.
 
 ## installing
 
