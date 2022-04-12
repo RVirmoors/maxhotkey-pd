@@ -19,7 +19,7 @@
 
 #   Removing a binding is easy.  Just bind to the key again, and give it    \
   empty braces, like this.  Now this won't call ::pd_bindings::window_close
-bind all <$::modifier-Key-w> {}
+# bind all <$::modifier-Key-w> {}
 
 # ctrl + m = open console (Pd window)
 bind all <$::modifier-Key-m> {menu_raise_pdwindow}
