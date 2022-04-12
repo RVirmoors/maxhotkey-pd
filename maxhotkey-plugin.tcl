@@ -21,6 +21,11 @@
   empty braces, like this.  Now this won't call ::pd_bindings::window_close
 # bind all <$::modifier-Key-w> {}
 
+
+# global vars
+set ::editing_comment 0
+set ::selected_object 0
+
 # ctrl + m = open console (Pd window)
 bind all <$::modifier-Key-m> {menu_raise_pdwindow}
 # ctrl + click = toggle edit mode
@@ -46,7 +51,7 @@ bind all <$::modifier-Button-1> {
 # adapted from https://svn.code.sf.net/p/pure-data/svn/trunk/scripts/guiplugins/simple_examples/tripleclickobj-plugin.tcl
 bind all <Double-ButtonRelease-1> {
 	set mytoplevel [winfo toplevel %W] 
-  if {[winfo class $mytoplevel] == "PatchWindow" && $::editmode($mytoplevel)} {
+  if {[winfo class $mytoplevel] eq "PatchWindow" && $::editmode($mytoplevel)} {
     # find object under mouse 
     # https://www.tcl.tk/man/tcl8.5/TkCmd/canvas.html#M24
     set obj_under [%W find closest %x %y 0.01]
@@ -65,8 +70,53 @@ bind all <Double-ButtonRelease-1> {
 	}
 }
 
-# global vars
-set ::editing_comment 0
+# ctrl + i = inspector (object Properties window)
+bind all <$::modifier-Key-i> {
+
+  set mytoplevel [winfo toplevel %W]
+  if {[winfo class $mytoplevel] eq "PatchWindow"} {
+    # default : use the canvas
+    set ::selected_object %W
+
+    foreach id [%W find withtag all] {
+        # look for blue (selected) objects... tcl tag "selected" doesn't work fsr
+        set obj_color [lindex [%W itemconfigure $id -fill] 4 ]
+        if { $obj_color eq "blue" } {
+            #set color [lindex [%W itemconfigure $id -fill] 4 ]
+            #set obj_tags [%W gettags [lindex $id 0]]
+            #::pdwindow::post "obj: $id : $obj_tags : $color \n"
+            set ::selected_object $id
+            break
+        }
+        if { $obj_color eq "#0000ff" } {
+          # selected_object is an iemgui
+            set tag [string trimright [lindex [%W gettags [lindex $id 0]] 0] "LABEL"]
+            append tag "BASE"
+            #::pdwindow::post "$tag \n"
+            set found [%W find withtag $tag]
+            #::pdwindow::post "find: $found \n"
+            if {[string length $found] > 0} {
+              set ::selected_object [lindex [%W find withtag $tag] 0]
+              break
+            }
+            # sometimes, like for [hradio], the first tag is ...BASE0
+            append tag "0"
+            set ::selected_object [lindex [%W find withtag $tag] 0]
+            break
+        }
+    }
+
+    # simulate a right-click inside the object box, and then popup item 0
+    set obj_box [%W bbox $::selected_object]
+    #::pdwindow::post "selected: $::selected_object \n"
+    #::pdwindow::post "$obj_box \n"
+    set ::popup_xcanvas [expr [lindex $obj_box 0] + 2]
+    set ::popup_ycanvas [expr [lindex $obj_box 1] + 2]
+    ::pdtk_canvas::done_popup $mytoplevel 0
+  }
+
+}
+
 
 # https://forum.pdpatchrepo.info/topic/13363/tcl-plugin-open-help-patch/4
 rename ::pd_bindings::patch_bindings original_bindings

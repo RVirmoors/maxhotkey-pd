@@ -12,6 +12,7 @@
 | ctrl+click on canvas | toggle edit mode | ✅ | 
 | alt+click | open help patch | ✅ |
 | ctrl+M | console (Pd window) | ✅ |
+| ctrl+I | inspector (Properties popup) | ✅ |
 | double-click | new object | ✅ |
 | typing into object box | hide cursor | ✅ |
 | N | new object | ✅ |
