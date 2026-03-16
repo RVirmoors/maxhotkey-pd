@@ -41,6 +41,8 @@ All the key bindings (including some not present in Max) are under the `set keyb
 
 ### why not Purr Data?
 
+2026 edit: [PlugData](https://plugdata.org) has done a great job implementing a Max-like UI, just use that!
+
 [Purr Data](https://www.purrdata.net/), [Pd-L2Ork](https://puredata.info/downloads/Pd-L2Ork), [PlugData](https://github.com/timothyschoen/PlugData), [Camomile](https://github.com/pierreguillot/Camomile) et al are wonderful forks that bring Pd into the 21th century. Unfortunately that means they use different rendering systems, so these tcl scripts won't apply to them. For now I'm focussing on Pd vanilla, but if someone wants to replicate this work for one of the Pd forks, that would be super nice.
 
 ### known issues
